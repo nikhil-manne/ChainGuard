@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ChainGuard Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Dark Theme Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: "#020617"
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-bg text-slate-100 min-h-screen p-6">
+
+  <!-- Header -->
+  <h1 class="text-2xl font-bold mb-6">🛡 ChainGuard Admin Console</h1>
+
+  <!-- Alert Banner -->
+  <div id="alertBanner" class="hidden mb-6 p-4 rounded-xl bg-red-600/20 border border-red-600">
+    <div class="flex items-center gap-2 text-red-400 font-semibold">
+      🚨 Tampering Detected
+    </div>
+    <p class="text-sm text-red-300 mt-1">
+      Blockchain hash mismatch detected in off-chain database.
+    </p>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-3 gap-4 mb-6">
+    <div class="p-4 rounded-xl border border-slate-800 bg-slate-900">
+      <div class="text-slate-400">Total Records</div>
+      <div id="totalCount" class="text-2xl font-bold">0</div>
+    </div>
+
+    <div class="p-4 rounded-xl border border-slate-800 bg-slate-900">
+      <div class="text-slate-400">Verified</div>
+      <div id="verifiedCount" class="text-2xl font-bold text-green-400">0</div>
+    </div>
+
+    <div class="p-4 rounded-xl border border-red-600 bg-red-600/10">
+      <div class="text-slate-400">Tampered</div>
+      <div id="tamperedCount" class="text-2xl font-bold text-red-400">0</div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-800 text-slate-300">
+        <tr>
+          <th class="p-3 text-left">Pattern</th>
+          <th class="p-3">Integrity</th>
+          <th class="p-3">Status</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Script -->
+  <script>
+    async function fetchVerifyDB() {
+      try {
+        const res = await fetch("http://localhost:3000/verify-db");
+        const data = await res.json();
+
+        const total = data.length;
+        const tampered = data.filter(d => d.tampered);
+        const verified = total - tampered.length;
+
+        // Update stats
+        document.getElementById("totalCount").textContent = total;
+        document.getElementById("verifiedCount").textContent = verified;
+        document.getElementById("tamperedCount").textContent = tampered.length;
+
+        // Alert banner
+        const banner = document.getElementById("alertBanner");
+        banner.classList.toggle("hidden", tampered.length === 0);
+
+        // Update table
+        const tbody = document.getElementById("tableBody");
+        tbody.innerHTML = "";
+
+        data.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.className = "border-t border-slate-800";
+
+          tr.innerHTML = `
+            <td class="p-3 break-all text-slate-200">${row.pattern}</td>
+            <td class="p-3 text-center">
+              ${row.tampered
+                ? "<span class='text-red-400'>❌ Hash Mismatch</span>"
+                : "<span class='text-green-400'>✔ Blockchain Match</span>"
+              }
+            </td>
+            <td class="p-3 text-center">
+              ${row.tampered
+                ? "<span class='text-red-400 font-semibold'>Compromised</span>"
+                : "<span class='text-green-400'>Verified</span>"
+              }
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error("Failed to fetch verify-db", err);
+      }
+    }
+
+    // Initial load + polling
+    fetchVerifyDB();
+    setInterval(fetchVerifyDB, 5000);
+  </script>
+
+</body>
+</html>

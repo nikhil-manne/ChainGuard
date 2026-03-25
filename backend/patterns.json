@@ -1,0 +1,18 @@
+[
+  {
+    "pattern": "www.example.com",
+    "severity": "high"
+  },
+  {
+    "pattern": "smilesvoegol.servebbs.org/account.php",
+    "severity": "high",
+    "hash": "0x6b170d8f2a9a7fe9b564fb68e649c6f16e238d736f8e421373485be3a5799257",
+    "timestamp": 1767847713489
+  },
+  {
+    "pattern": "www.instagram.com",
+    "severity": "medium",
+    "hash": "0x6727988053acfcfc56110698cc20f92bf6cb374a8648eeb29f9a70ef4f60f075",
+    "timestamp": "2026-01-08T07:25:38.245Z"
+  }
+]

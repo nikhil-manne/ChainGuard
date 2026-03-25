@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>ChainGuard</title>
+  <style>
+    body {
+      width: 280px;
+      background: #020617;
+      color: #e5e7eb;
+      font-family: Inter, Arial, sans-serif;
+      padding: 16px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 10px;
+      background: #020617;
+      border: 1px solid #1f2933;
+      border-radius: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .low {
+      background: #16a34a33;
+      color: #22c55e;
+    }
+
+    .medium {
+      background: #f59e0b33;
+      color: #f59e0b;
+    }
+
+    .high {
+      background: #ef444433;
+      color: #ef4444;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 12px;
+      border-radius: 6px;
+      border: 1px solid #1f2933;
+      background: #020617;
+      color: white;
+    }
+
+    button {
+      margin-top: 10px;
+      width: 100%;
+      padding: 10px;
+      background: #ef4444;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .footer {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #9ca3af;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    🛡 <span>ChainGuard</span>
+  </div>
+
+  <div class="status">
+    <div>Current Status</div>
+    <span class="badge low">SAFE</span>
+  </div>
+
+  <input id="pattern" placeholder="Report suspicious URL" />
+  <button id="submit">Report Threat</button>
+
+  <div class="footer">
+    Blockchain-verified protection
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
